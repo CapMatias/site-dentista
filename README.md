@@ -1,2 +1,3 @@
 # site-dentista
-site para uma dentista (beta)
+site para um consultório médico
+
