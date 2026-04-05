@@ -1,366 +1,2489 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Drª Laís de Melo — Dentista</title>
-  <style>
-    :root{
-      --primary:#2b8cff;
-      --accent:#66a6ff;
-      --bg:#f7fbff;
-      --dark:#102a43;
-      --muted:#556;
-      --card:#ffffff;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: linear-gradient(180deg,var(--bg),#eaf4ff 70%);
-      color:var(--dark);
-      -webkit-font-smoothing:antialiased;
-      scroll-behavior:smooth;
-    }
-    .container{max-width:1100px;margin:0 auto;padding:0 18px}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Dra. Laís de Melo — Cirurgiã Dentista</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #09090e;
+        --bg2: #111119;
+        --bg3: #16161f;
+        --gold: #c9a96e;
+        --gold-lt: #e8d5ad;
+        --gold-dk: #8a6b3a;
+        --text: #e8e4dc;
+        --muted: #7a7568;
+        --border: rgba(201, 169, 110, 0.14);
+        --sh: 0 30px 80px rgba(0, 0, 0, 0.6);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Outfit", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      * {
+        cursor: none;
+      }
+      #cursor {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--gold);
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: transform 0.1s;
+      }
+      #cursor-ring {
+        position: fixed;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid rgba(201, 169, 110, 0.5);
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition:
+          left 0.12s ease,
+          top 0.12s ease,
+          transform 0.25s ease,
+          border-color 0.25s;
+      }
 
-    /* Header */
-    header{
-      position:sticky; top:0; z-index:60;
-      background: rgba(255,255,255,0.86);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 4px 18px rgba(16,42,67,0.06);
-    }
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
-    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--dark)}
-    .logo svg{width:36px;height:36px}
-    .logo span{font-weight:700}
-    .logo small{display:block;font-size:11px;color:var(--muted);margin-top:-6px}
+      /* LOADER */
+      #loader {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        z-index: 9990;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        transition: opacity 0.8s ease;
+      }
+      #loader.out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .ld-logo {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 26px;
+        font-weight: 300;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--gold);
+        opacity: 0;
+        animation: fadeUp 0.8s 0.3s forwards;
+      }
+      .ld-bar-w {
+        width: 220px;
+        height: 1px;
+        background: rgba(201, 169, 110, 0.18);
+      }
+      .ld-bar {
+        height: 1px;
+        background: linear-gradient(90deg, var(--gold-dk), var(--gold));
+        width: 0;
+        animation: loadBar 1.8s 0.5s ease forwards;
+      }
+      @keyframes loadBar {
+        to {
+          width: 100%;
+        }
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
 
-    .nav-links{list-style:none;display:flex;gap:12px;margin:0;padding:0}
-    .nav-links a{text-decoration:none;color:var(--dark);padding:8px 12px;border-radius:8px;font-weight:600}
-    .nav-links a:hover{background:rgba(16,42,67,0.04);transform:translateY(-2px);transition:.18s}
+      /* NAV */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 0 32px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid transparent;
+        transition: all 0.4s;
+      }
+      header.scrolled {
+        background: rgba(9, 9, 14, 0.92);
+        backdrop-filter: blur(20px);
+        border-color: var(--border);
+      }
+      .logo-nav {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--gold);
+      }
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 4px;
+      }
+      nav ul a {
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 500;
+        padding: 7px 14px;
+        border-radius: 6px;
+        letter-spacing: 0.04em;
+        transition: all 0.2s;
+      }
+      nav ul a:hover {
+        color: var(--gold);
+        background: rgba(201, 169, 110, 0.07);
+      }
+      .nav-cta {
+        background: transparent !important;
+        border: 1px solid var(--gold) !important;
+        color: var(--gold) !important;
+        padding: 8px 20px !important;
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+        transition: all 0.3s !important;
+      }
+      .nav-cta:hover {
+        background: var(--gold) !important;
+        color: var(--bg) !important;
+      }
+      .menu-btn {
+        display: none;
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--gold);
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 18px;
+      }
 
-    .menu-toggle{display:none;background:none;border:0;font-size:18px}
+      /* HERO */
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background: url("https://talesedition.github.io/doutoralais/img/03.jpeg")
+          center/cover no-repeat;
+        transform: scale(1.08);
+        transition: transform 8s ease;
+      }
+      .hero-bg.loaded {
+        transform: scale(1);
+      }
+      .hero-ov {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          110deg,
+          rgba(9, 9, 14, 0.94) 45%,
+          rgba(9, 9, 14, 0.6) 75%,
+          rgba(9, 9, 14, 0.3) 100%
+        );
+      }
+      .hero-inner {
+        position: relative;
+        z-index: 2;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 140px 32px 80px;
+        width: 100%;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        padding: 6px 18px;
+        margin-bottom: 28px;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--gold);
+        opacity: 0;
+        animation: fadeUp 0.7s 0.2s forwards;
+      }
+      .hero-badge::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--gold);
+        animation: blink 1.8s ease infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.3;
+          transform: scale(0.6);
+        }
+      }
+      .hero h1 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(52px, 8.5vw, 100px);
+        font-weight: 300;
+        line-height: 1;
+        color: #fff;
+        margin-bottom: 24px;
+        opacity: 0;
+        animation: fadeUp 0.9s 0.35s forwards;
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--gold);
+      }
+      .hero-sub {
+        font-size: 17px;
+        color: rgba(232, 228, 220, 0.68);
+        line-height: 1.75;
+        max-width: 460px;
+        margin-bottom: 40px;
+        font-weight: 300;
+        opacity: 0;
+        animation: fadeUp 0.9s 0.5s forwards;
+      }
+      .hero-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+        opacity: 0;
+        animation: fadeUp 0.9s 0.65s forwards;
+      }
+      .btn-gold {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, var(--gold), var(--gold-dk));
+        color: var(--bg);
+        font-weight: 600;
+        font-size: 14px;
+        padding: 15px 32px;
+        border-radius: 10px;
+        text-decoration: none;
+        letter-spacing: 0.04em;
+        box-shadow: 0 8px 32px rgba(201, 169, 110, 0.3);
+        transition: all 0.3s;
+      }
+      .btn-gold:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 44px rgba(201, 169, 110, 0.45);
+      }
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid rgba(232, 228, 220, 0.2);
+        color: var(--text);
+        font-size: 14px;
+        padding: 14px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-weight: 400;
+      }
+      .btn-ghost:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      .hero-stats {
+        display: flex;
+        gap: 0;
+        margin-top: 60px;
+        border-top: 1px solid var(--border);
+        padding-top: 40px;
+        opacity: 0;
+        animation: fadeUp 0.9s 0.8s forwards;
+      }
+      .h-stat {
+        padding: 0 44px 0 0;
+        margin-right: 44px;
+        border-right: 1px solid var(--border);
+      }
+      .h-stat:last-child {
+        border: 0;
+        margin: 0;
+        padding: 0;
+      }
+      .h-stat .num {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 52px;
+        font-weight: 600;
+        color: var(--gold);
+        line-height: 1;
+      }
+      .h-stat small {
+        font-size: 11px;
+        color: var(--muted);
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        display: block;
+        margin-top: 4px;
+      }
+      .hero-portrait {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 40%;
+        opacity: 0;
+        animation: imgSlide 0.9s 0.4s forwards;
+      }
+      @keyframes imgSlide {
+        from {
+          opacity: 0;
+          clip-path: inset(0 100% 0 0);
+        }
+        to {
+          opacity: 1;
+          clip-path: inset(0 0% 0 0);
+        }
+      }
+      .hero-portrait img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+      }
+      .hero-portrait::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          var(--bg) 0%,
+          transparent 35%,
+          transparent 65%,
+          var(--bg) 100%
+        );
+        z-index: 1;
+      }
+      .scroll-hint {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        opacity: 0;
+        animation: fadeUp 0.7s 1.2s forwards;
+      }
+      .scroll-line {
+        width: 1px;
+        height: 44px;
+        background: linear-gradient(180deg, var(--gold), transparent);
+        animation: scrollPulse 2s ease infinite;
+      }
+      @keyframes scrollPulse {
+        0%,
+        100% {
+          opacity: 0.35;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
 
-    /* HERO */
-    .hero{
-      position:relative;
-      min-height:72vh;
-      display:flex;align-items:center;
-      background-image: url('https://img.freepik.com/fotos-gratis/fundo-gradiente-desfocado-na-cor-rosa_58702-1643.jpg?semt=ais_hybrid&w=740&q=80');
-      background-size:cover;background-position:center;
-      color:white; overflow:hidden;
-    }
-    .fotos{
-       width: 50%; 
-    }
-    .Ah{
-          display: flex;
-    justify-content: right;
-    }
-    .hero::before{
-      content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.14)); z-index:0;
-    }
-    .hero .hero-inner{position:relative;z-index:2;padding:36px 18px;display:flex;align-items:center;gap:28px;width:100%;max-width:1100px;margin:0 auto}
-    .hero-text{max-width:680px}
-    .hero-text h1{font-size:clamp(28px,6vw,44px);margin:0 0 12px;letter-spacing:0.2px}
-    .tagline{font-size:17px;color:rgba(255,255,255,0.9);margin-bottom:18px}
+      /* SECTIONS */
+      section {
+        padding: 100px 0;
+        position: relative;
+        z-index: 1;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 32px;
+      }
+      .s-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 14px;
+      }
+      .s-label::before {
+        content: "";
+        flex: 0 0 28px;
+        height: 1px;
+        background: var(--gold);
+      }
+      .s-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(34px, 4.5vw, 54px);
+        font-weight: 300;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 16px;
+      }
+      .s-title em {
+        font-style: italic;
+        color: var(--gold);
+      }
+      .s-sub {
+        font-size: 16px;
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 520px;
+        font-weight: 300;
+      }
 
-    .cta{display:flex;gap:12px;flex-wrap:wrap}
-    .btn{
-      display:inline-block;padding:12px 18px;border-radius:10px;text-decoration:none;font-weight:700;
-      color:#fff;background:linear-gradient(90deg,var(--primary),var(--accent));box-shadow:0 8px 20px rgba(43,140,255,0.18)
-    }
-    .btn.secondary{background:transparent;border:2px solid rgba(255,255,255,0.18);color:#fff}
+      /* REVEAL */
+      .rv {
+        opacity: 0;
+        transform: translateY(36px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .rv.vis {
+        opacity: 1;
+        transform: none;
+      }
+      .rv-l {
+        opacity: 0;
+        transform: translateX(-44px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .rv-l.vis {
+        opacity: 1;
+        transform: none;
+      }
+      .rv-r {
+        opacity: 0;
+        transform: translateX(44px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .rv-r.vis {
+        opacity: 1;
+        transform: none;
+      }
+      .d1 {
+        transition-delay: 0.1s;
+      }
+      .d2 {
+        transition-delay: 0.22s;
+      }
+      .d3 {
+        transition-delay: 0.34s;
+      }
+      .d4 {
+        transition-delay: 0.46s;
+      }
+      .d5 {
+        transition-delay: 0.58s;
+      }
 
-    /* sections */
-    section{padding:48px 0}
-    h2{color:var(--dark);margin:0 0 18px;font-size:24px}
+      /* SOBRE */
+      #sobre {
+        background: var(--bg2);
+      }
+      .sobre-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: center;
+      }
+      .sobre-imgs {
+        position: relative;
+        height: 580px;
+      }
+      .si-main {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 76%;
+        height: 88%;
+        border-radius: 2px;
+        overflow: hidden;
+        box-shadow: var(--sh);
+      }
+      .si-main img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+        transition: transform 6s ease;
+      }
+      .si-main:hover img {
+        transform: scale(1.05);
+      }
+      .si-sm {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 48%;
+        height: 54%;
+        border-radius: 2px;
+        overflow: hidden;
+        box-shadow: var(--sh);
+        border: 4px solid var(--bg2);
+      }
+      .si-sm img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 6s ease;
+      }
+      .si-sm:hover img {
+        transform: scale(1.06);
+      }
+      .si-badge {
+        position: absolute;
+        right: 8px;
+        bottom: 16%;
+        background: var(--gold);
+        color: var(--bg);
+        font-family: "Cormorant Garamond", serif;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 10px 18px;
+        border-radius: 3px;
+        box-shadow: 0 8px 24px rgba(201, 169, 110, 0.4);
+        white-space: nowrap;
+      }
+      .sobre-text p {
+        color: rgba(232, 228, 220, 0.68);
+        font-size: 15px;
+        line-height: 1.82;
+        font-weight: 300;
+        margin-bottom: 20px;
+      }
+      .sobre-feats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 32px;
+      }
+      .feat {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 18px;
+        transition: all 0.3s;
+      }
+      .feat:hover {
+        border-color: rgba(201, 169, 110, 0.35);
+        transform: translateY(-3px);
+      }
+      .feat-ico {
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+      .feat h4 {
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 3px;
+      }
+      .feat p {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
 
-    .sobre-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 10px 30px rgba(16,42,67,0.06);border:1px solid rgba(16,42,67,0.04)}
-    .card p{color:var(--muted);line-height:1.5}
+      /* ESPECIALIDADES */
+      #especialidades {
+        background: var(--bg);
+        background-image: radial-gradient(
+          ellipse 60% 40% at 50% 0%,
+          rgba(201, 169, 110, 0.05),
+          transparent
+        );
+      }
+      .espec-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 2px;
+        margin-top: 48px;
+        border: 1px solid var(--border);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .espec-card {
+        background: var(--bg2);
+        padding: 32px 22px;
+        border-right: 1px solid var(--border);
+        transition: all 0.4s;
+        position: relative;
+        overflow: hidden;
+      }
+      .espec-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--gold-dk), var(--gold));
+        transform: scaleX(0);
+        transition: transform 0.4s;
+        transform-origin: left;
+      }
+      .espec-card:hover {
+        background: var(--bg3);
+      }
+      .espec-card:hover::after {
+        transform: scaleX(1);
+      }
+      .espec-card:last-child {
+        border-right: 0;
+      }
+      .espec-num {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 38px;
+        font-weight: 300;
+        color: rgba(201, 169, 110, 0.16);
+        line-height: 1;
+        margin-bottom: 10px;
+      }
+      .espec-ico {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+      .espec-card h4 {
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+      .espec-card p {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .espec-grid2 {
+        grid-template-columns: repeat(5, 1fr);
+        margin-top: 2px;
+        border-top: 0;
+      }
 
-    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-    .service-card{padding:18px;border-radius:12px;background:linear-gradient(180deg,#fff,#f7fbff);transition:transform .35s ease;box-shadow:0 10px 24px rgba(16,42,67,0.04)}
-    .service-card:hover{transform:translateY(-8px)}
-    .service-card .icon{font-size:28px;margin-bottom:8px}
+      /* RESULTS */
+      #resultados {
+        background: var(--bg2);
+      }
+      .filter-tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 32px 0 40px;
+      }
+      .tab-btn {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+        font-family: inherit;
+        font-size: 13px;
+        padding: 9px 20px;
+        border-radius: 100px;
+        letter-spacing: 0.04em;
+        transition: all 0.3s;
+      }
+      .tab-btn.active,
+      .tab-btn:hover {
+        background: var(--gold);
+        border-color: var(--gold);
+        color: var(--bg);
+        font-weight: 600;
+      }
+      .results-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 20px;
+      }
+      .result-card {
+        background: var(--bg3);
+        border-radius: 3px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        transition: all 0.4s;
+      }
+      .result-card:hover {
+        border-color: rgba(201, 169, 110, 0.32);
+        transform: translateY(-4px);
+        box-shadow: var(--sh);
+      }
+      .ba-slider {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 4/3;
+        background: #000;
+        user-select: none;
+      }
+      .ba-slider img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        -webkit-user-drag: none;
+        pointer-events: none;
+      }
+      .ba-after {
+        clip-path: inset(0 50% 0 0);
+      }
+      .ba-div {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 2px;
+        background: var(--gold);
+        z-index: 10;
+        transform: translateX(-50%);
+      }
+      .ba-handle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--gold);
+        transform: translate(-50%, -50%);
+        z-index: 11;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      }
+      .ba-handle svg {
+        width: 20px;
+        height: 20px;
+      }
+      .ba-lbls {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 14px;
+        z-index: 12;
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), transparent);
+      }
+      .ba-lbls span {
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.35);
+        padding: 4px 10px;
+        border-radius: 3px;
+      }
+      .ba-lbls span:last-child {
+        background: rgba(201, 169, 110, 0.55);
+      }
+      .result-info {
+        padding: 18px 20px 20px;
+      }
+      .result-info .tag {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--gold);
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .result-info h4 {
+        font-size: 15px;
+        color: #fff;
+        margin-bottom: 5px;
+      }
+      .result-info p {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .r-single {
+        width: 100%;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+        display: block;
+      }
 
-    .team-grid{display:flex;gap:12px;overflow:auto;padding-bottom:8px}
-    .team-card{min-width:200px;background:var(--card);border-radius:10px;padding:12px;text-align:center;box-shadow:0 8px 18px rgba(16,42,67,0.05)}
-    .team-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
-    .team-card .role{color:var(--muted);font-size:13px;margin-top:6px}
+      /* GALLERY */
+      #galeria {
+        background: var(--bg);
+      }
+      .gal-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: 240px;
+        gap: 8px;
+        margin-top: 40px;
+      }
+      .gal-item {
+        overflow: hidden;
+        border-radius: 2px;
+        position: relative;
+        background: var(--bg3);
+      }
+      .gal-item:first-child {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+      .gal-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.65s ease;
+      }
+      .gal-item:hover img {
+        transform: scale(1.07);
+      }
+      .gal-ov {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          transparent 40%,
+          rgba(9, 9, 14, 0.88)
+        );
+        opacity: 0;
+        transition: opacity 0.4s;
+        display: flex;
+        align-items: flex-end;
+        padding: 20px;
+      }
+      .gal-item:hover .gal-ov {
+        opacity: 1;
+      }
+      .gal-ov p {
+        font-size: 13px;
+        color: #fff;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+      }
 
-    .test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-    .testimonial{background:linear-gradient(180deg,#fff,#f6fbff);padding:16px;border-radius:10px;border-left:6px solid var(--primary);color:var(--muted)}
+      /* DEPOIMENTOS */
+      #depoimentos {
+        background: var(--bg2);
+      }
+      .test-wrap {
+        position: relative;
+        overflow: hidden;
+        margin-top: 48px;
+      }
+      .test-track {
+        display: flex;
+        gap: 20px;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .test-card {
+        flex: 0 0 380px;
+        background: var(--bg3);
+        border-radius: 3px;
+        padding: 32px;
+        border: 1px solid var(--border);
+        position: relative;
+      }
+      .test-card::before {
+        content: "\201C";
+        position: absolute;
+        top: 20px;
+        right: 24px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 72px;
+        line-height: 1;
+        color: rgba(201, 169, 110, 0.1);
+        pointer-events: none;
+      }
+      .test-stars {
+        color: var(--gold);
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+      .test-card p {
+        font-size: 15px;
+        color: rgba(232, 228, 220, 0.72);
+        line-height: 1.75;
+        font-weight: 300;
+        font-style: italic;
+        margin-bottom: 20px;
+      }
+      .test-au {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .test-av {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--gold-dk), var(--gold));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 18px;
+        color: var(--bg);
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .test-au strong {
+        display: block;
+        font-size: 14px;
+        color: #fff;
+        font-weight: 600;
+      }
+      .test-au span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .car-nav {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 28px;
+      }
+      .car-dot {
+        width: 28px;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--border);
+        transition: all 0.3s;
+        border: 0;
+      }
+      .car-dot.on {
+        background: var(--gold);
+        width: 48px;
+      }
 
-    .contact-grid{display:grid;grid-template-columns:1fr 360px;gap:18px;align-items:start}
-    .contact-form{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 20px rgba(16,42,67,0.06)}
-    .contact-form label{display:block;margin-top:8px;color:var(--muted);font-weight:600}
-    .contact-form input, .contact-form textarea{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid rgba(16,42,67,0.08)}
-    .contact-form button{margin-top:12px;background:linear-gradient(90deg,var(--primary),var(--accent));color:#fff;border:0;padding:12px;border-radius:10px;cursor:pointer}
+      /* CTA STRIP */
+      .cta-strip {
+        background: var(--bg3);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding: 80px 32px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-strip::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("https://talesedition.github.io/doutoralais/img/07.jpeg")
+          center/cover;
+        opacity: 0.06;
+      }
+      .cta-strip .c {
+        position: relative;
+        z-index: 1;
+      }
+      .cta-strip h2 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(36px, 5vw, 62px);
+        font-weight: 300;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 14px;
+      }
+      .cta-strip h2 em {
+        font-style: italic;
+        color: var(--gold);
+      }
+      .cta-strip p {
+        font-size: 16px;
+        color: var(--muted);
+        margin-bottom: 36px;
+        font-weight: 300;
+      }
+      .cta-btns {
+        display: flex;
+        gap: 14px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
 
-    .contact-info{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 20px rgba(16,42,67,0.04)}
-    iframe.map{width:100%;height:220px;border:0;border-radius:8px}
+      /* CONTATO */
+      #contato {
+        background: var(--bg);
+      }
+      .contact-wrap {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 32px;
+        align-items: start;
+        margin-top: 48px;
+      }
+      .cform {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 40px;
+      }
+      .cform-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 28px;
+        font-weight: 300;
+        color: #fff;
+        margin-bottom: 6px;
+      }
+      .cform-sub {
+        font-size: 14px;
+        color: var(--muted);
+        margin-bottom: 32px;
+        line-height: 1.6;
+      }
+      .frow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .fld {
+        margin-bottom: 16px;
+      }
+      .fld label {
+        display: block;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 7px;
+      }
+      .fld input,
+      .fld textarea,
+      .fld select {
+        width: 100%;
+        padding: 13px 16px;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        font-family: inherit;
+        font-size: 14px;
+        color: var(--text);
+        outline: none;
+        transition:
+          border 0.2s,
+          box-shadow 0.2s;
+      }
+      .fld input::placeholder,
+      .fld textarea::placeholder {
+        color: rgba(122, 117, 104, 0.45);
+      }
+      .fld input:focus,
+      .fld textarea:focus,
+      .fld select:focus {
+        border-color: rgba(201, 169, 110, 0.5);
+        box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.07);
+      }
+      .fld textarea {
+        resize: vertical;
+        min-height: 96px;
+      }
+      .fld select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23c9a96e' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        background-color: var(--bg3);
+      }
+      .fld select option {
+        background: var(--bg3);
+        color: var(--text);
+      }
+      .priv {
+        font-size: 12px;
+        color: var(--muted);
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+      .btn-send {
+        width: 100%;
+        padding: 16px;
+        border: 0;
+        border-radius: 6px;
+        background: linear-gradient(135deg, var(--gold), var(--gold-dk));
+        color: var(--bg);
+        font-family: inherit;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        box-shadow: 0 8px 28px rgba(201, 169, 110, 0.22);
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      .btn-send:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 36px rgba(201, 169, 110, 0.35);
+      }
+      .form-sent {
+        display: none;
+        text-align: center;
+        padding: 36px 16px;
+      }
+      .form-sent .tick {
+        font-size: 54px;
+        display: block;
+        margin-bottom: 14px;
+      }
+      .form-sent h3 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 26px;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+      .form-sent p {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .form-sent a {
+        color: var(--gold);
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 18px;
+        display: inline-block;
+      }
+      .cside {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .cinfo {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 3px;
+        padding: 22px 24px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        transition: border 0.3s;
+      }
+      .cinfo:hover {
+        border-color: rgba(201, 169, 110, 0.3);
+      }
+      .cinfo-ico {
+        width: 46px;
+        height: 46px;
+        border-radius: 6px;
+        flex-shrink: 0;
+        background: rgba(201, 169, 110, 0.09);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+      }
+      .cinfo h4 {
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 5px;
+      }
+      .cinfo p,
+      .cinfo a {
+        font-size: 14px;
+        color: var(--text);
+        text-decoration: none;
+        line-height: 1.55;
+      }
+      .cinfo a:hover {
+        color: var(--gold);
+      }
+      .wa-block {
+        background: linear-gradient(135deg, #122012, #0c1c0c);
+        border: 1px solid rgba(37, 211, 102, 0.2);
+        border-radius: 3px;
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+      .wa-block:hover {
+        border-color: rgba(37, 211, 102, 0.5);
+        transform: translateY(-3px);
+        box-shadow: 0 14px 36px rgba(37, 211, 102, 0.1);
+      }
+      .wa-block span {
+        font-size: 32px;
+      }
+      .wa-block b {
+        display: block;
+        color: #fff;
+        font-size: 16px;
+        margin-bottom: 3px;
+      }
+      .wa-block small {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 13px;
+      }
+      .map-box {
+        border-radius: 3px;
+        overflow: hidden;
+        aspect-ratio: 16/9;
+        border: 1px solid var(--border);
+      }
+      .map-box iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+        filter: grayscale(85%) invert(90%) hue-rotate(180deg);
+      }
 
-    footer{background:linear-gradient(180deg,#e9f3ff,#dfeeff);padding:18px;text-align:center;border-top:1px solid rgba(16,42,67,0.04);margin-top:28px}
-    footer p{margin:6px;color:var(--muted)}
+      /* FOOTER */
+      footer {
+        background: var(--bg2);
+        border-top: 1px solid var(--border);
+        padding: 60px 32px 28px;
+      }
+      .ft-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.6fr 1fr 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 48px;
+      }
+      .ft-brand h3 {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 22px;
+        font-weight: 600;
+        color: var(--gold);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      .ft-brand p {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      footer h4 {
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 16px;
+      }
+      footer ul {
+        list-style: none;
+      }
+      footer ul li {
+        margin-bottom: 10px;
+      }
+      footer ul a {
+        font-size: 13px;
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      footer ul a:hover {
+        color: var(--gold);
+      }
+      .ft-bottom {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .ft-bottom a {
+        color: var(--muted);
+        text-decoration: none;
+      }
+      .ft-bottom a:hover {
+        color: var(--gold);
+      }
 
-    /* reveal animation helpers (will be triggered by JS) */
-    .reveal{opacity:0;transform:translateY(18px);transition:all .7s cubic-bezier(.2,.9,.3,1)}
-    .reveal.visible{opacity:1;transform:none}
+      /* WA FLOAT */
+      .wa-fab {
+        position: fixed;
+        bottom: 28px;
+        right: 28px;
+        z-index: 90;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #25d366, #128c50);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        text-decoration: none;
+        box-shadow: 0 8px 32px rgba(37, 211, 102, 0.4);
+        transition: all 0.3s;
+        animation: waPop 0.7s 2s both;
+      }
+      .wa-fab:hover {
+        transform: scale(1.1);
+        box-shadow: 0 14px 40px rgba(37, 211, 102, 0.55);
+      }
+      @keyframes waPop {
+        from {
+          opacity: 0;
+          transform: scale(0.3);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .wa-fab::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2px solid #25d366;
+        opacity: 0.4;
+        animation: waRing 2.2s ease-out infinite 2.7s;
+      }
+      @keyframes waRing {
+        0% {
+          transform: scale(1);
+          opacity: 0.5;
+        }
+        100% {
+          transform: scale(1.9);
+          opacity: 0;
+        }
+      }
 
-    /* responsive */
-    @media (max-width:900px){
-      .hero-inner{flex-direction:column;gap:16px;padding:28px}
-      .sobre-grid{grid-template-columns:1fr}
-      .contact-grid{grid-template-columns:1fr}
-    }
-    @media (max-width:700px){
-      .nav-links{display:none}
-      .menu-toggle{display:block}
-      .team-grid{gap:10px}
-    }
-  </style>
-</head>
-<body>
+      /* RESPONSIVE */
+      @media (max-width: 960px) {
+        .hero-portrait {
+          display: none;
+        }
+        .sobre-grid {
+          grid-template-columns: 1fr;
+        }
+        .sobre-imgs {
+          height: 340px;
+          margin-bottom: 48px;
+        }
+        .contact-wrap {
+          grid-template-columns: 1fr;
+        }
+        .ft-inner {
+          grid-template-columns: 1fr 1fr;
+        }
+        .gal-grid {
+          grid-template-columns: repeat(2, 1fr);
+          grid-auto-rows: 180px;
+        }
+        .gal-item:first-child {
+          grid-column: span 1;
+          grid-row: span 1;
+        }
+        .espec-grid,
+        .espec-grid2 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 700px) {
+        nav ul {
+          display: none;
+        }
+        .menu-btn {
+          display: block;
+        }
+        .frow {
+          grid-template-columns: 1fr;
+        }
+        .hero-stats {
+          flex-wrap: wrap;
+          gap: 24px;
+        }
+        .h-stat {
+          border: 0;
+          padding: 0;
+          margin: 0;
+        }
+        .cform {
+          padding: 24px;
+        }
+        .ft-inner {
+          grid-template-columns: 1fr;
+        }
+        .gal-grid {
+          grid-template-columns: 1fr 1fr;
+          grid-auto-rows: 150px;
+        }
+        .results-grid {
+          grid-template-columns: 1fr;
+        }
+        .espec-grid,
+        .espec-grid2 {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
 
-  <header>
-    <div class="nav container">
-      <a class="logo" href="#home" aria-label="Voltar ao topo">
-        <!-- simple tooth icon -->
-        <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M32 6c-4 0-6 3-6 7 0 4-1 6-4 9-2 2-3 6-3 10 0 8 6 14 13 14s13-6 13-14c0-4-1-8-3-10-3-3-4-5-4-9 0-4-2-7-6-7z" fill="#2b8cff"/></svg>
-        <div>
-          <span>Drª Laís de Melo</span><br><small>Dentista</small>
-        </div>
-      </a>
+    <a
+      href="https://wa.me/5522981071066"
+      target="_blank"
+      rel="noopener"
+      class="wa-fab"
+      aria-label="WhatsApp"
+      >💬</a
+    >
 
-      <button class="menu-toggle" aria-expanded="false" aria-label="Abrir Menu">☰</button>
+    <div id="loader">
+      <div class="ld-logo">Dra. Laís de Melo</div>
+      <div class="ld-bar-w"><div class="ld-bar"></div></div>
+    </div>
 
-      <nav aria-label="Menu principal">
-        <ul class="nav-links">
+    <header id="hdr">
+      <a class="logo-nav" href="#home">Dra. Laís de Melo</a>
+      <button class="menu-btn" id="mBtn">☰</button>
+      <nav id="mainNav">
+        <ul>
           <li><a href="#sobre">Sobre</a></li>
-          <li><a href="#servicos">Serviços</a></li>
-          <li><a href="#equipe">Equipe</a></li>
-          <li><a href="#contato">Contato</a></li>
+          <li><a href="#especialidades">Especialidades</a></li>
+          <li><a href="#resultados">Resultados</a></li>
+          <li><a href="#galeria">Galeria</a></li>
+          <li><a href="#depoimentos">Depoimentos</a></li>
+          <li><a href="#contato" class="nav-cta">Agendar Consulta</a></li>
         </ul>
       </nav>
-    </div>
-  </header>
+    </header>
 
-  <main id="home">
-    <section class="hero" id="home-section">
-      <div class="hero-inner container">
-        <div class="hero-text">
-          <h1>Drª Laís de Melo</h1>
-          <p class="tagline">Sorriso saudável, autoestima renovada. Atendimento humanizado para toda a família.</p>
-          <div class="cta">
-            <a class="btn" href="#contato">Agendar Consulta</a>
-            <a class="btn secondary" href="#servicos">Ver Serviços</a>
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-ov"></div>
+      <div class="hero-portrait">
+        <img
+          src="https://talesedition.github.io/doutoralais/img/01.png"
+          alt="Dra. Laís de Melo"
+        />
+      </div>
+      <div class="hero-inner">
+        <div class="hero-badge">
+          Especialista em Estética &amp; Implantes · Saquarema RJ
+        </div>
+        <h1>Seu sorriso<br />em <em>boas mãos</em></h1>
+        <p class="hero-sub">
+          Cuidado odontológico de excelência com tecnologia de ponta. Transforme
+          seu sorriso com quem entende do assunto.
+        </p>
+        <div class="hero-actions">
+          <a href="#contato" class="btn-gold">
+            <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor">
+              <path
+                d="M16 2C8.27 2 2 8.27 2 16c0 2.46.64 4.77 1.76 6.78L2 30l7.41-1.73A13.93 13.93 0 0 0 16 30c7.73 0 14-6.27 14-14S23.73 2 16 2z"
+              />
+            </svg>
+            Agendar pelo WhatsApp
+          </a>
+          <a href="#resultados" class="btn-ghost">Ver Resultados →</a>
+        </div>
+        <div class="hero-stats">
+          <div class="h-stat">
+            <div class="num" data-count="500" data-suffix="+">0</div>
+            <small>Pacientes Atendidos</small>
+          </div>
+          <div class="h-stat">
+            <div class="num" data-count="100" data-suffix="%">0</div>
+            <small>Satisfação</small>
+          </div>
+          <div class="h-stat">
+            <div class="num" data-count="8" data-suffix="+">0</div>
+            <small>Anos de Experiência</small>
           </div>
         </div>
-        <div class="Ah">
-          
-            
+      </div>
+      <div class="scroll-hint">
+        <div class="scroll-line"></div>
+        <span>Role para baixo</span>
+      </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section id="sobre">
+      <div class="container">
+        <div class="sobre-grid">
+          <div class="sobre-imgs rv-l">
+            <div class="si-main">
+              <img
+                src="https://talesedition.github.io/doutoralais/img/02.jpeg"
+                alt="Dra. Laís no consultório"
+              />
+            </div>
+            <div class="si-sm">
+              <img
+                src="https://talesedition.github.io/doutoralais/img/01.png"
+                alt="Dra. Laís de Melo"
+              />
+            </div>
+            <div class="si-badge">CRO Ativo</div>
+          </div>
+          <div class="rv-r d1">
+            <p class="s-label">Quem é a Dra. Laís</p>
+            <h2 class="s-title">
+              A profissional que seu <em>sorriso precisa</em>
+            </h2>
+            <p>
+              A <strong style="color: #fff">Dra. Laís de Melo</strong> é
+              cirurgiã dentista dedicada a proporcionar o melhor atendimento
+              odontológico, combinando técnica apurada com um cuidado humanizado
+              e acolhedor.
+            </p>
+            <p>
+              Com formação sólida e constante atualização nas mais modernas
+              técnicas odontológicas, oferece tratamentos personalizados para
+              cada paciente, sempre priorizando a saúde bucal e a estética do
+              sorriso.
+            </p>
+            <div class="sobre-feats">
+              <div class="feat rv d2">
+                <div class="feat-ico">🤝</div>
+                <h4>Atendimento Humanizado</h4>
+                <p>Acolhimento e empatia em cada consulta</p>
+              </div>
+              <div class="feat rv d3">
+                <div class="feat-ico">🔬</div>
+                <h4>Tecnologia de Ponta</h4>
+                <p>Equipamentos modernos e atualizados</p>
+              </div>
+              <div class="feat rv d4">
+                <div class="feat-ico">🏛️</div>
+                <h4>Consultório Moderno</h4>
+                <p>Ambiente confortável e seguro</p>
+              </div>
+              <div class="feat rv d5">
+                <div class="feat-ico">⭐</div>
+                <h4>Especialista</h4>
+                <p>Implantes &amp; Estética Dental</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="sobre" class="container reveal">
-      <h2>Sobre a Clínica</h2>
-      <div class="sobre-grid">
-        <div class="card">
-          <h3>Atendimento personalizado</h3>
-          <p>Oferecemos consultas detalhadas com plano de tratamento claro e atenção especial à ansiedade do paciente. Explicamos cada passo do procedimento.</p>
+    <!-- ESPECIALIDADES -->
+    <section id="especialidades">
+      <div class="container">
+        <div class="rv">
+          <p class="s-label">Áreas de Atuação</p>
+          <h2 class="s-title">Especialidades</h2>
+          <p class="s-sub">
+            Do diagnóstico ao sorriso final — tratamentos completos com
+            excelência.
+          </p>
         </div>
-        <div class="card">
-          <h3>Ambiente moderno</h3>
-          <p>Consultório com equipamentos modernos, ambiente climatizado e equipe preparada para cuidar de toda a família — desde crianças até idosos.</p>
+        <div class="espec-grid rv d1">
+          <div class="espec-card">
+            <div class="espec-num">01</div>
+            <div class="espec-ico">🦷</div>
+            <h4>Implantes</h4>
+            <p>Reposição de dentes perdidos com implantes de titânio.</p>
+          </div>
+          <div class="espec-card">
+            <div class="espec-num">02</div>
+            <div class="espec-ico">✨</div>
+            <h4>Facetas em Resina</h4>
+            <p>Transforme seu sorriso com facetas estéticas.</p>
+          </div>
+          <div class="espec-card">
+            <div class="espec-num">03</div>
+            <div class="espec-ico">🛠️</div>
+            <h4>Prótese Fixa</h4>
+            <p>Coroas e pontes fixas estéticas e funcionais.</p>
+          </div>
+          <div class="espec-card">
+            <div class="espec-num">04</div>
+            <div class="espec-ico">⚡</div>
+            <h4>Clareamento</h4>
+            <p>Técnicas seguras para dentes mais brancos.</p>
+          </div>
+          <div class="espec-card">
+            <div class="espec-num">05</div>
+            <div class="espec-ico">🔮</div>
+            <h4>Endodontia</h4>
+            <p>Tratamento de canal com precisão avançada.</p>
+          </div>
+        </div>
+        <div
+          class="espec-grid espec-grid2 rv d2"
+          style="margin-top: 2px; border-top: 0"
+        >
+          <div class="espec-card">
+            <div class="espec-num">06</div>
+            <div class="espec-ico">🧹</div>
+            <h4>Limpeza</h4>
+            <p>Profilaxia profissional para saúde em dia.</p>
+          </div>
+          <div class="espec-card">
+            <div class="espec-num">07</div>
+            <div class="espec-ico">🎭</div>
+            <h4>Odontopediatria</h4>
+            <p>Atendimento lúdico e cuidadoso para crianças.</p>
+          </div>
+          <div class="espec-card">
+            <div class="espec-num">08</div>
+            <div class="espec-ico">💎</div>
+            <h4>Restaurações</h4>
+            <p>Restaurações estéticas em resina de qualidade.</p>
+          </div>
+          <div class="espec-card">
+            <div class="espec-num">09</div>
+            <div class="espec-ico">🌀</div>
+            <h4>Cirurgia de Siso</h4>
+            <p>Extração com segurança e conforto máximo.</p>
+          </div>
+          <div class="espec-card">
+            <div class="espec-num">10</div>
+            <div class="espec-ico">🔱</div>
+            <h4>Prótese Total</h4>
+            <p>Próteses completas modernas e confortáveis.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section id="resultados">
+      <div class="container">
+        <div class="rv">
+          <p class="s-label">Resultados Reais</p>
+          <h2 class="s-title">Antes <em>&amp;</em> Depois</h2>
+          <p class="s-sub">
+            Transformações reais. Arraste o divisor para comparar os resultados.
+          </p>
+        </div>
+        <div class="filter-tabs rv d1">
+          <button class="tab-btn active" data-filter="all">Todos</button>
+          <button class="tab-btn" data-filter="facetas">Facetas</button>
+          <button class="tab-btn" data-filter="restauracao">
+            Restaurações
+          </button>
+          <button class="tab-btn" data-filter="ceramica">Cerâmica</button>
+          <button class="tab-btn" data-filter="implante">Implantes</button>
+        </div>
+        <div class="results-grid" id="rGrid">
+          <div class="result-card rv d1" data-cat="facetas">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/01_facetas_em_resina_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/01_facetas_em_resina_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Facetas em Resina</span>
+              <h4>Facetas — Caso 1</h4>
+              <p>
+                Transformação completa com facetas, corrigindo formato e cor.
+              </p>
+            </div>
+          </div>
+          <div class="result-card rv d2" data-cat="facetas">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/02_facetas_em_resina_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/02_facetas_em_resina_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Facetas em Resina</span>
+              <h4>Facetas — Caso 2</h4>
+              <p>
+                Harmonização com facetas proporcionando naturalidade e beleza.
+              </p>
+            </div>
+          </div>
+          <div class="result-card rv d3" data-cat="restauracao">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/01_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/01_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Restauração Estética</span>
+              <h4>Restauração — Caso 1</h4>
+              <p>
+                Reconstrução com resina composta restaurando anatomia natural.
+              </p>
+            </div>
+          </div>
+          <div class="result-card rv d4" data-cat="restauracao">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/02_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/02_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Restauração Estética</span>
+              <h4>Restauração — Caso 2</h4>
+              <p>Correção de desgaste e restauração da anatomia natural.</p>
+            </div>
+          </div>
+          <div class="result-card rv d1" data-cat="restauracao">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/03_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/03_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Restauração Estética</span>
+              <h4>Restauração — Caso 3</h4>
+              <p>Restauração anterior devolvendo a confiança no sorriso.</p>
+            </div>
+          </div>
+          <div class="result-card rv d2" data-cat="restauracao">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/04_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/04_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Restauração Estética</span>
+              <h4>Restauração — Caso 4</h4>
+              <p>Reconstrução completa em resina de alta performance.</p>
+            </div>
+          </div>
+          <div class="result-card rv d3" data-cat="restauracao">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/05_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/05_restaura%C3%A7%C3%A3o_est%C3%A9tica_em_resina_composta_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Restauração Estética</span>
+              <h4>Restauração — Caso 5</h4>
+              <p>Transformação com restaurações em resina composta.</p>
+            </div>
+          </div>
+          <div class="result-card rv d4" data-cat="ceramica">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/01_coroa_total_em_cer%C3%A2mica_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/01_coroa_total_em_cer%C3%A2mica_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Cerâmica</span>
+              <h4>Coroa Total em Cerâmica</h4>
+              <p>Coroa cerâmica com naturalidade e alta durabilidade.</p>
+            </div>
+          </div>
+          <div class="result-card rv d1" data-cat="ceramica">
+            <img
+              class="r-single"
+              src="https://talesedition.github.io/doutoralais/img/blocos_em_ceramica.jpeg"
+              alt="Blocos CAD/CAM"
+            />
+            <div class="result-info">
+              <span class="tag">CAD/CAM</span>
+              <h4>Blocos em Cerâmica</h4>
+              <p>
+                Coroas cerâmicas com tecnologia CAD/CAM para máxima precisão.
+              </p>
+            </div>
+          </div>
+          <div class="result-card rv d2" data-cat="ceramica">
+            <img
+              class="r-single"
+              src="https://talesedition.github.io/doutoralais/img/coroas_unitarias_sobre_implantes_em_porcelana.jpeg"
+              alt="Porcelana"
+            />
+            <div class="result-info">
+              <span class="tag">Porcelana</span>
+              <h4>Coroas em Porcelana</h4>
+              <p>Coroas unitárias em porcelana sobre implantes.</p>
+            </div>
+          </div>
+          <div class="result-card rv d3" data-cat="implante">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/01_coroas_unit%C3%A1rias_sobre_implantes_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/01_coroas_unit%C3%A1rias_sobre_implantes_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Implantodontia</span>
+              <h4>Coroas sobre Implantes</h4>
+              <p>Reposição de dentes ausentes com implantes e coroas.</p>
+            </div>
+          </div>
+          <div class="result-card rv d4" data-cat="restauracao">
+            <div
+              class="ba-slider"
+              data-b="https://talesedition.github.io/doutoralais/img/01_bloco_em_resina_antes.jpeg"
+              data-a="https://talesedition.github.io/doutoralais/img/01_bloco_em_resina_depois.jpeg"
+            ></div>
+            <div class="result-info">
+              <span class="tag">Restauração Posterior</span>
+              <h4>Restauração em Resina</h4>
+              <p>Restauração posterior restaurando função mastigatória.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="servicos" class="servicos container reveal">
-      <h2>Serviços</h2>
-      <div class="services-grid">
-        <article class="service-card">
-          <div class="icon">🦷</div>
-          <h4>Limpeza e Profilaxia</h4>
-          <p>Higienização profissional, remoção de placa e orientação de escovação.</p>
-        </article>
-
-        <article class="service-card">
-          <div class="icon">✨</div>
-          <h4>Clareamento</h4>
-          <p>Técnicas seguras e supervisionadas para deixar seu sorriso mais branco.</p>
-        </article>
-
-        <article class="service-card">
-          <div class="icon">🛠️</div>
-          <h4>Restaurações e Próteses</h4>
-          <p>Restaurações estéticas e próteses confortáveis e duráveis.</p>
-        </article>
-
-        <article class="service-card">
-          <div class="icon">🧸</div>
-          <h4>Odontopediatria</h4>
-          <p>Atendimento lúdico e cuidadoso para os pequenos.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="equipe" class="equipe container reveal">
-      <h2>Nossa Equipe</h2>
-      <div class="team-grid">
-        <div class="team-card">
-          <img src="https://i.postimg.cc/YSmBnspz/IMG-5425.jpg" alt="Dr Laís">
-          <h4>Drª Laís de Melo</h4>
-          <p class="role">Cirurgiã-Dentista</p>
+    <!-- GALERIA -->
+    <section id="galeria">
+      <div class="container">
+        <div class="rv">
+          <p class="s-label">Nosso Trabalho</p>
+          <h2 class="s-title">Veja Nossos <em>Tratamentos</em></h2>
         </div>
-
-        <div class="team-card">
-          <img src="" alt="Assistente">
-          <h4>Fulano</h4>
-          <p class="role">Assistente</p>
-        </div>
-
-        <div class="team-card">
-          <img src="" alt="Higienista">
-          <h4>Ciclano</h4>
-          <p class="role">Higienista</p>
+        <div class="gal-grid rv d1">
+          <div class="gal-item">
+            <img
+              src="https://talesedition.github.io/doutoralais/img/02.jpeg"
+              alt="Atendimento"
+            />
+            <div class="gal-ov"><p>Atendimento Personalizado</p></div>
+          </div>
+          <div class="gal-item">
+            <img
+              src="https://talesedition.github.io/doutoralais/img/04.jpeg"
+              alt="Procedimentos"
+            />
+            <div class="gal-ov"><p>Cirurgia e Procedimentos</p></div>
+          </div>
+          <div class="gal-item">
+            <img
+              src="https://talesedition.github.io/doutoralais/img/05.jpeg"
+              alt="Cuidado"
+            />
+            <div class="gal-ov"><p>Cuidado com o Paciente</p></div>
+          </div>
+          <div class="gal-item">
+            <img
+              src="https://talesedition.github.io/doutoralais/img/06.jpeg"
+              alt="Tecnologia"
+            />
+            <div class="gal-ov"><p>Tecnologia Avançada</p></div>
+          </div>
+          <div class="gal-item">
+            <img
+              src="https://talesedition.github.io/doutoralais/img/07.jpeg"
+              alt="Consultório"
+            />
+            <div class="gal-ov"><p>Consultório Moderno</p></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="testimonials container reveal">
-      <h2>Depoimentos</h2>
-      <div class="test-grid">
-        <div class="testimonial">"Excelente atendimento, muito atenciosa e competente." <br><strong>— Ana</strong></div>
-        <div class="testimonial">"Profissional e humana. Recomendo!" <br><strong>— Carlos</strong></div>
+    <!-- DEPOIMENTOS -->
+    <section id="depoimentos">
+      <div class="container">
+        <div class="rv">
+          <p class="s-label">Depoimentos</p>
+          <h2 class="s-title">O que os pacientes <em>dizem</em></h2>
+        </div>
+        <div class="test-wrap rv d1">
+          <div class="test-track" id="tTrack">
+            <div class="test-card">
+              <div class="test-stars">★★★★★</div>
+              <p>
+                "A Dra. Laís é simplesmente incrível! Fiz implantes e o
+                resultado superou todas as minhas expectativas. Atendimento
+                excelente e muito profissional."
+              </p>
+              <div class="test-au">
+                <div class="test-av">M</div>
+                <div>
+                  <strong>Maria Silva</strong><span>Implantes Dentários</span>
+                </div>
+              </div>
+            </div>
+            <div class="test-card">
+              <div class="test-stars">★★★★★</div>
+              <p>
+                "Fiz clareamento e facetas com a Dra. Laís. Meu sorriso mudou
+                completamente! Recomendo a todos que buscam qualidade e bom
+                atendimento."
+              </p>
+              <div class="test-au">
+                <div class="test-av">A</div>
+                <div>
+                  <strong>Ana Paula</strong><span>Clareamento + Facetas</span>
+                </div>
+              </div>
+            </div>
+            <div class="test-card">
+              <div class="test-stars">★★★★★</div>
+              <p>
+                "Tirei meus sisos com a Dra. Laís e foi uma experiência muito
+                tranquila. Profissional competente que transmite muita
+                confiança."
+              </p>
+              <div class="test-au">
+                <div class="test-av">C</div>
+                <div>
+                  <strong>Carlos Eduardo</strong><span>Cirurgia de Siso</span>
+                </div>
+              </div>
+            </div>
+            <div class="test-card">
+              <div class="test-stars">★★★★★</div>
+              <p>
+                "Levei minha filha e ela adorou! O consultório é muito acolhedor
+                e a Dra. Laís tem um jeito especial com crianças."
+              </p>
+              <div class="test-au">
+                <div class="test-av">J</div>
+                <div>
+                  <strong>Juliana Ramos</strong><span>Odontopediatria</span>
+                </div>
+              </div>
+            </div>
+            <div class="test-card">
+              <div class="test-stars">★★★★★</div>
+              <p>
+                "Fiz restaurações e o resultado ficou impecável. Natural, bonito
+                e duradouro. Me sinto muito mais confiante sorrindo agora!"
+              </p>
+              <div class="test-au">
+                <div class="test-av">R</div>
+                <div>
+                  <strong>Roberto Alves</strong
+                  ><span>Restaurações Estéticas</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="car-nav" id="carNav"></div>
       </div>
     </section>
 
-    <section id="contato" class="contato container reveal">
-      <h2>Contato e Localização</h2>
-      <div class="contact-grid">
-        <form class="contact-form" onsubmit="handleSubmit(event)">
-          <label for="nome">Nome</label>
-          <input id="nome" type="text" placeholder="Seu nome" required>
-
-          <label for="email">E-mail</label>
-          <input id="email" type="email" placeholder="seu@email.com" required>
-
-          <label for="mensagem">Mensagem</label>
-          <textarea id="mensagem" rows="4" placeholder="Escreva sua mensagem"></textarea>
-
-          <button type="submit">Enviar Mensagem</button>
-          <p id="form-msg" style="color:green;margin-top:8px"></p>
-        </form>
-
-        <div class="contact-info">
-          <h3>Endereço</h3>
-          <p>Rua Norival Bravo, lote 9B — Centro, Saquarema / RJ</p>
-
-          <h3>Telefone</h3>
-          <p>(22) 98107-1066</p>
-
-          <h3>Horário</h3>
-          <p>Seg–Sex: 09:00–17:00 • Sáb: 09:00–13:00</p>
-
-          <h3>Mapa</h3>
-          <!-- iframe pode ser bloqueado em alguns ambientes  — há fallback abaixo -->
-          <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7349.019143717428!2d-42.4972775!3d-22.9314532!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x975eee03d7e42d%3A0x8b15d4b321bf9e27!2sR.%20Norival%20Bravo%2C%209%20-%20Campo%20Aviacao%2C%20Saquarema%20-%20RJ%2C%2028990-768!5e0!3m2!1spt-BR!2sbr!4v1760483411266!5m2!1spt-BR!2sbr" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
-          <p style="font-size:13px;color:var(--muted);margin-top:8px">Se o mapa não carregar, <a href="https://www.google.com/maps/place/R.+Norival+Bravo,+9+-+Campo+Aviacao,+Saquarema+-+RJ,+28990-768/@-22.9314532,-42.4972775,16z/data=!4m6!3m5!1s0x975eee03d7e42d:0x8b15d4b321bf9e27!8m2!3d-22.9314532!4d-42.4972775!16s%2Fg%2F11t103c450?hl=pt-br&g_ep=Eg1tbF8yMDI1MDkxNV8wIJvbDyoASAJQAg%3D%3D" target="_blank" rel="noopener">abra no Google Maps</a>.</p>
+    <!-- CTA STRIP -->
+    <div class="cta-strip">
+      <div class="c container rv">
+        <h2>Pronto para transformar<br />seu <em>sorriso?</em></h2>
+        <p>Não espere mais para ter o sorriso dos seus sonhos. Agende agora.</p>
+        <div class="cta-btns">
+          <a href="https://wa.me/5522981071066" target="_blank" class="btn-gold"
+            >💬 Chamar no WhatsApp</a
+          >
+          <a href="tel:+5522981071066" class="btn-ghost">📞 Ligar Agora</a>
         </div>
       </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>© <span id="ano"></span> Drª Laís de Melo — Todos os direitos reservados</p>
-      <p style="font-size:13px;color:var(--muted)">Agende sua consulta!</p>
     </div>
-  </footer>
 
-  <noscript>
-    <div style="padding:12px;text-align:center;background:#fff3cd;color:#92400e">Observação: para animações e envio do formulário é necessário que o JavaScript esteja ativado no ambiente. Se o Mimo remover scripts, salve este arquivo como HTML e abra no navegador do celular (ou use o app Acode).</div>
-  </noscript>
+    <!-- CONTATO -->
+    <section id="contato">
+      <div class="container">
+        <div class="rv">
+          <p class="s-label">Agendamento</p>
+          <h2 class="s-title">Agende sua <em>Consulta</em></h2>
+        </div>
+        <div class="contact-wrap">
+          <div class="cform rv d1">
+            <div id="formBody">
+              <h3 class="cform-title">Solicitar Agendamento</h3>
+              <p class="cform-sub">
+                Preencha os dados e a Dra. Laís receberá sua solicitação
+                diretamente no WhatsApp. ⚡
+              </p>
+              <div class="frow">
+                <div class="fld">
+                  <label>Nome completo *</label
+                  ><input
+                    id="f-nome"
+                    type="text"
+                    placeholder="Seu nome completo"
+                    required
+                  />
+                </div>
+                <div class="fld">
+                  <label>WhatsApp *</label
+                  ><input
+                    id="f-tel"
+                    type="tel"
+                    placeholder="(22) 9 0000-0000"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="fld">
+                <label>E-mail</label
+                ><input id="f-email" type="email" placeholder="seu@email.com" />
+              </div>
+              <div class="fld">
+                <label>Serviço desejado *</label>
+                <select id="f-serv" required>
+                  <option value="">Selecione um serviço...</option>
+                  <option>Consulta de Avaliação</option>
+                  <option>Implantes</option>
+                  <option>Facetas em Resina</option>
+                  <option>Prótese Fixa / Total</option>
+                  <option>Clareamento Dental</option>
+                  <option>Restaurações Estéticas</option>
+                  <option>Limpeza e Profilaxia</option>
+                  <option>Endodontia (Canal)</option>
+                  <option>Cirurgia de Siso</option>
+                  <option>Odontopediatria</option>
+                  <option>Outro</option>
+                </select>
+              </div>
+              <div class="fld">
+                <label>Observações</label
+                ><textarea
+                  id="f-msg"
+                  placeholder="Urgência, preferência de horário, dúvidas..."
+                ></textarea>
+              </div>
+              <div class="priv">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M8 1L2 4v4c0 3.31 2.55 6.41 6 7.16C11.45 14.41 14 11.31 14 8V4L8 1z"
+                    stroke="#7a7568"
+                    stroke-width="1.4"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                Ao enviar, você será redirecionado ao WhatsApp da clínica com
+                sua solicitação pré-preenchida. Seus dados são usados apenas
+                para contato.
+              </div>
+              <button class="btn-send" onclick="enviar()">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 32 32"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M16 2C8.27 2 2 8.27 2 16c0 2.46.64 4.77 1.76 6.78L2 30l7.41-1.73A13.93 13.93 0 0 0 16 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm6.84 19.16c-.28.79-1.64 1.5-2.24 1.59-.59.09-1.33.13-2.14-.13a19.95 19.95 0 0 1-1.94-.72c-3.43-1.48-5.67-4.94-5.84-5.17-.17-.23-1.38-1.84-1.38-3.51s.87-2.49 1.18-2.83c.31-.34.67-.43.9-.43h.65c.21 0 .49-.08.77.59.28.67.96 2.34 1.04 2.51.09.17.15.37.03.59-.12.23-.18.37-.35.57-.17.2-.36.44-.51.59-.17.17-.34.35-.15.68.19.33.85 1.4 1.82 2.27 1.25 1.12 2.3 1.46 2.63 1.63.33.17.52.14.71-.09.19-.23.82-.96 1.04-1.29.22-.33.44-.27.74-.16.3.11 1.9.9 2.23 1.06.33.16.55.24.63.38.09.13.09.76-.19 1.55z"
+                  />
+                </svg>
+                Enviar pelo WhatsApp
+              </button>
+            </div>
+            <div id="formSent" class="form-sent">
+              <span class="tick">✅</span>
+              <h3>Solicitação enviada!</h3>
+              <p>
+                Você foi redirecionado ao WhatsApp da Dra. Laís com a mensagem
+                pré-preenchida. Aguarde o retorno em breve!
+              </p>
+              <a href="#contato" onclick="resetForm()"
+                >← Fazer novo agendamento</a
+              >
+            </div>
+          </div>
+          <div class="cside rv d2">
+            <a
+              href="https://wa.me/5522981071066"
+              target="_blank"
+              rel="noopener"
+              class="wa-block"
+            >
+              <span>💬</span>
+              <div><b>Fale pelo WhatsApp</b><small>(22) 98107-1066</small></div>
+            </a>
+            <div class="cinfo">
+              <div class="cinfo-ico">📍</div>
+              <div>
+                <h4>Endereço</h4>
+                <p>Rua Norival Bravo, lote 9B<br />Centro — Saquarema / RJ</p>
+              </div>
+            </div>
+            <div class="cinfo">
+              <div class="cinfo-ico">🕐</div>
+              <div>
+                <h4>Horário</h4>
+                <p>Seg–Sex: 08h às 18h<br />Sábado: Fechado</p>
+              </div>
+            </div>
+            <div class="cinfo">
+              <div class="cinfo-ico">📧</div>
+              <div>
+                <h4>E-mail</h4>
+                <a href="mailto:contato@drlaisdemelo.com"
+                  >contato@drlaisdemelo.com</a
+                >
+              </div>
+            </div>
+            <div class="map-box">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7349.019143717428!2d-42.4972775!3d-22.9314532!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x975eee03d7e42d%3A0x8b15d4b321bf9e27!2sR.%20Norival%20Bravo%2C%209%20-%20Campo%20Aviacao%2C%20Saquarema%20-%20RJ%2C%2028990-768!5e0!3m2!1spt-BR!2sbr!4v1760483411266!5m2!1spt-BR!2sbr"
+                loading="lazy"
+                title="Mapa"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <script>
-    (function(){
-      // Menu toggle mobile
-      const toggle = document.querySelector('.menu-toggle');
-      const navLinks = document.querySelector('.nav-links');
-      toggle?.addEventListener('click', ()=>{
-        const showing = getComputedStyle(navLinks).display !== 'none';
-        if(showing){
-          navLinks.style.display = 'none';
-          toggle.setAttribute('aria-expanded','false')
-        } else {
-          navLinks.style.display = 'flex';
-          navLinks.style.flexDirection = 'column';
-          navLinks.style.position = 'absolute';
-          navLinks.style.right = '18px';
-          navLinks.style.top = '62px';
-          navLinks.style.background = 'rgba(255,255,255,0.96)';
-          navLinks.style.padding = '10px';
-          navLinks.style.borderRadius = '10px';
-          toggle.setAttribute('aria-expanded','true')
-        }
+    <!-- FOOTER -->
+    <footer>
+      <div class="ft-inner">
+        <div class="ft-brand">
+          <h3>Dra. Laís de Melo</h3>
+          <p>
+            Cirurgiã Dentista dedicada a transformar sorrisos com excelência,
+            carinho e tecnologia de ponta. Especialista em Implantes e Estética.
+          </p>
+        </div>
+        <div>
+          <h4>Links Rápidos</h4>
+          <ul>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#especialidades">Especialidades</a></li>
+            <li><a href="#resultados">Resultados</a></li>
+            <li><a href="#galeria">Galeria</a></li>
+            <li><a href="#depoimentos">Depoimentos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contato</h4>
+          <ul>
+            <li><a href="tel:+5522981071066">(22) 98107-1066</a></li>
+            <li>
+              <a href="https://wa.me/5522981071066" target="_blank">WhatsApp</a>
+            </li>
+            <li><a href="mailto:contato@drlaisdemelo.com">E-mail</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Horário</h4>
+          <ul>
+            <li><a href="#">Seg–Sex: 08h–18h</a></li>
+            <li><a href="#">Sábado: Fechado</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ft-bottom">
+        <span
+          >© <span id="ano"></span> Dra. Laís de Melo — Todos os direitos
+          reservados</span
+        >
+        <a href="https://wa.me/5522981071066">Agende sua consulta →</a>
+      </div>
+    </footer>
+
+    <script>
+      // CURSOR
+      const $cur = document.getElementById("cursor"),
+        $ring = document.getElementById("cursor-ring");
+      document.addEventListener("mousemove", (e) => {
+        $cur.style.left = e.clientX + "px";
+        $cur.style.top = e.clientY + "px";
+        setTimeout(() => {
+          $ring.style.left = e.clientX + "px";
+          $ring.style.top = e.clientY + "px";
+        }, 90);
       });
-
-      // Reveal on scroll (graceful if IntersectionObserver is present)
-      function revealOnScroll(){
-        const els = document.querySelectorAll('.reveal');
-        if('IntersectionObserver' in window){
-          const obs = new IntersectionObserver((entries)=>{
-            entries.forEach(e=>{
-              if(e.isIntersecting) e.target.classList.add('visible');
-            });
-          },{threshold:0.16});
-          els.forEach(el=>obs.observe(el));
-        } else {
-          // fallback: reveal all
-          els.forEach(el=>el.classList.add('visible'));
-        }
-      }
-
-      // Form handler
-      window.handleSubmit = function(e){
-        e.preventDefault();
-        const nome = (document.getElementById('nome')?.value || 'Paciente').trim();
-        const msg = document.getElementById('form-msg');
-        if(msg) msg.textContent = 'Obrigado, ' + nome + '! Sua mensagem foi recebida. Entraremos em contato.';
-        // limpando campos
-        e.target.querySelectorAll('input,textarea').forEach(i=>i.value='');
-      };
-
-      // small parallax effect on hero for desktop
-      function heroParallax(){
-        const hero = document.querySelector('.hero');
-        hero?.addEventListener('mousemove', (ev)=>{
-          const x = (ev.clientX - window.innerWidth/2)/80;
-          const y = (ev.clientY - window.innerHeight/2)/120;
-          hero.style.transform = `translate(${x}px, ${y}px)`;
-          hero.style.transition = 'transform .1s';
+      document.querySelectorAll("a,button").forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+          $ring.style.transform = "translate(-50%,-50%) scale(1.8)";
+          $ring.style.borderColor = "var(--gold)";
         });
-        hero?.addEventListener('mouseleave', ()=> hero.style.transform = '');
+        el.addEventListener("mouseleave", () => {
+          $ring.style.transform = "translate(-50%,-50%) scale(1)";
+          $ring.style.borderColor = "rgba(201,169,110,.5)";
+        });
+      });
+
+      // LOADER
+      window.addEventListener("load", () =>
+        setTimeout(
+          () => document.getElementById("loader").classList.add("out"),
+          2000,
+        ),
+      );
+
+      // ANO
+      document.getElementById("ano").textContent = new Date().getFullYear();
+
+      // NAV SCROLL
+      window.addEventListener("scroll", () =>
+        document
+          .getElementById("hdr")
+          .classList.toggle("scrolled", scrollY > 40),
+      );
+
+      // MOBILE MENU
+      document.getElementById("mBtn")?.addEventListener("click", function () {
+        const n = document.getElementById("mainNav");
+        const open = n.classList.contains("open");
+        n.classList.toggle("open", !open);
+        if (!open) {
+          n.style.cssText =
+            "display:block;position:fixed;top:72px;left:0;right:0;background:rgba(9,9,14,.97);backdrop-filter:blur(20px);padding:20px;border-bottom:1px solid var(--border);z-index:99";
+          n.querySelector("ul").style.cssText =
+            "display:flex;flex-direction:column;gap:4px";
+        } else {
+          n.style.cssText = "";
+          n.querySelector("ul").style.cssText = "";
+        }
+      });
+
+      // HERO BG ZOOM IN
+      setTimeout(
+        () => document.getElementById("heroBg").classList.add("loaded"),
+        80,
+      );
+
+      // REVEAL
+      const rvEls = document.querySelectorAll(".rv,.rv-l,.rv-r");
+      new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("vis");
+          }),
+        { threshold: 0.1 },
+      ).observe.bind(null);
+      const rvObs = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("vis");
+          }),
+        { threshold: 0.08 },
+      );
+      rvEls.forEach((el) => rvObs.observe(el));
+
+      // COUNT UP
+      function countUp(el) {
+        const target = +el.dataset.count,
+          suffix = el.dataset.suffix || "";
+        let n = 0;
+        const step = 1800 / target;
+        const t = setInterval(() => {
+          n = Math.min(n + 1, target);
+          el.textContent = n + suffix;
+          if (n >= target) clearInterval(t);
+        }, step);
+      }
+      new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            document.querySelectorAll(".num[data-count]").forEach(countUp);
+            entries[0].target._obs.disconnect();
+          }
+        },
+        { threshold: 0.3 },
+      ).observe(document.querySelector(".hero-stats") || document.body);
+      // fix for self-ref
+      const statsEl = document.querySelector(".hero-stats");
+      if (statsEl) {
+        const sObs = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              document.querySelectorAll(".num[data-count]").forEach(countUp);
+              sObs.disconnect();
+            }
+          },
+          { threshold: 0.3 },
+        );
+        sObs.observe(statsEl);
       }
 
-      // set year
-      function setYear(){ const y=document.getElementById('ano'); if(y) y.textContent = new Date().getFullYear(); }
+      // BEFORE/AFTER SLIDERS
+      function buildSlider(wrap) {
+        const b = wrap.dataset.b,
+          a = wrap.dataset.a;
+        if (!b || !a) return;
+        wrap.innerHTML = `
+    <img src="${b}" alt="Antes" draggable="false">
+    <img class="ba-after" src="${a}" alt="Depois" draggable="false">
+    <div class="ba-div"></div>
+    <div class="ba-handle"><svg viewBox="0 0 24 24" fill="none" stroke="var(--bg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l-6 7 6 7M16 5l6 7-6 7"/></svg></div>
+    <div class="ba-lbls"><span>Antes</span><span>Depois</span></div>`;
+        const after = wrap.querySelector(".ba-after"),
+          divLine = wrap.querySelector(".ba-div"),
+          handle = wrap.querySelector(".ba-handle");
+        let drag = false;
+        const setP = (p) => {
+          p = Math.max(2, Math.min(98, p));
+          after.style.clipPath = `inset(0 ${100 - p}% 0 0)`;
+          divLine.style.left = handle.style.left = p + "%";
+        };
+        setP(50);
+        const getX = (e) => (e.touches ? e.touches[0].clientX : e.clientX);
+        const onMove = (e) => {
+          if (!drag) return;
+          const r = wrap.getBoundingClientRect();
+          setP(((getX(e) - r.left) / r.width) * 100);
+        };
+        handle.addEventListener("mousedown", () => (drag = true));
+        handle.addEventListener("touchstart", () => (drag = true), {
+          passive: true,
+        });
+        window.addEventListener("mouseup", () => (drag = false));
+        window.addEventListener("touchend", () => (drag = false));
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("touchmove", onMove, { passive: true });
+      }
+      document.querySelectorAll(".ba-slider").forEach(buildSlider);
 
-      // init
-      document.addEventListener('DOMContentLoaded', function(){
-        revealOnScroll();
-        heroParallax();
-        setYear();
+      // FILTER TABS
+      document.querySelectorAll(".tab-btn").forEach((btn) =>
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const f = btn.dataset.filter;
+          document
+            .querySelectorAll(".result-card")
+            .forEach(
+              (c) =>
+                (c.style.display =
+                  f === "all" || c.dataset.cat === f ? "" : "none"),
+            );
+        }),
+      );
+
+      // CAROUSEL
+      (function () {
+        const track = document.getElementById("tTrack"),
+          nav = document.getElementById("carNav");
+        if (!track) return;
+        const cards = track.querySelectorAll(".test-card");
+        let cur = 0;
+        const pv = () =>
+          window.innerWidth < 700 ? 1 : window.innerWidth < 960 ? 2 : 3;
+        function buildDots() {
+          nav.innerHTML = "";
+          const pages = Math.ceil(cards.length / pv());
+          for (let i = 0; i < pages; i++) {
+            const d = document.createElement("button");
+            d.className = "car-dot" + (i === 0 ? " on" : "");
+            d.addEventListener("click", () => go(i));
+            nav.appendChild(d);
+          }
+        }
+        function go(idx) {
+          cur = Math.max(0, Math.min(idx, Math.ceil(cards.length / pv()) - 1));
+          const cw = cards[0].offsetWidth + 20;
+          track.style.transform = `translateX(-${cur * cw * pv()}px)`;
+          nav
+            .querySelectorAll(".car-dot")
+            .forEach((d, i) => d.classList.toggle("on", i === cur));
+        }
+        buildDots();
+        go(0);
+        window.addEventListener("resize", () => {
+          buildDots();
+          go(0);
+        });
+        setInterval(() => go((cur + 1) % Math.ceil(cards.length / pv())), 5000);
+      })();
+
+      // PHONE MASK
+      document.getElementById("f-tel")?.addEventListener("input", (e) => {
+        let v = e.target.value.replace(/\D/g, "").slice(0, 11);
+        if (v.length > 7)
+          v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+        else if (v.length > 2) v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+        else if (v.length) v = `(${v}`;
+        e.target.value = v;
       });
-    })();
-  </script>
-</body>
+
+      // WHATSAPP FORM
+      function enviar() {
+        const nome = document.getElementById("f-nome").value.trim();
+        const tel = document.getElementById("f-tel").value.trim();
+        const email = document.getElementById("f-email").value.trim();
+        const serv = document.getElementById("f-serv").value;
+        const msg = document.getElementById("f-msg").value.trim();
+        if (!nome) {
+          alert("Informe seu nome.");
+          return;
+        }
+        if (!tel) {
+          alert("Informe seu WhatsApp.");
+          return;
+        }
+        if (!serv) {
+          alert("Selecione um serviço.");
+          return;
+        }
+        const txt = `🦷 *Nova solicitação de consulta!*\n\n*Nome:* ${nome}\n*WhatsApp:* ${tel}\n${email ? `*E-mail:* ${email}\n` : ``}*Serviço desejado:* ${serv}\n${msg ? `*Observações:* ${msg}\n` : ``}\n📅 Paciente aguarda confirmação de horário.`;
+        window.open(
+          `https://wa.me/5522981071066?text=${encodeURIComponent(txt)}`,
+          "_blank",
+        );
+        document.getElementById("formBody").style.display = "none";
+        document.getElementById("formSent").style.display = "block";
+      }
+      function resetForm() {
+        document.getElementById("formBody").style.display = "";
+        document.getElementById("formSent").style.display = "none";
+        ["f-nome", "f-tel", "f-email", "f-msg"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = "";
+        });
+        document.getElementById("f-serv").value = "";
+      }
+    </script>
+  </body>
 </html>
